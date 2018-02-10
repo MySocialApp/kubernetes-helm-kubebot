@@ -1,0 +1,10 @@
+kubebotImageVersion: v1.8.6
+kubebotNodeSelector:
+  node-role.kubernetes.io/node: "true"
+
+kubebotSlackToken: ""
+# Get private chan: https://slack.com/api/groups.list?token=<token>
+# Get public chan: https://slack.com/api/channels.list?token=<token>
+kubebotSlackChannelsIds: ""
+kubebotSlackAdminsNicknames: ""
+kubebotSlackValidNommands: "get describe logs explain"

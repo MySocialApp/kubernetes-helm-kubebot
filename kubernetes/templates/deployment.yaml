@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "kubernetes.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "kubernetes.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "kubernetes.name" . }}
+    spec:
+      nodeSelector:
+        {{- range $key, $val := .Values.kubebotNodeSelector }}
+        {{ $key }}: {{ $val | quote }}
+        {{- end}}
+      containers:
+      - name: {{ template "kubernetes.name" . }}
+        image: quay.io/mysocialapp/kubebot:{{ .Values.kubebotImageVersion }}
+        env:
+        - name: KUBEBOT_SLACK_TOKEN
+          value: {{ .Values.kubebotSlackToken }}
+        - name: KUBEBOT_SLACK_CHANNELS_IDS
+          value: {{ .Values.kubebotSlackChannelsIds }}
+        - name: KUBEBOT_SLACK_ADMINS_NICKNAMES
+          value: {{ .Values.kubebotSlackAdminsNicknames }}
+        - name: KUBEBOT_SLACK_VALID_COMMANDS
+          value: {{ .Values.kubebotSlackValidNommands }}
